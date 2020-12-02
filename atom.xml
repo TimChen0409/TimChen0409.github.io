@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Code</title>
+  <title>Tim Chen&#39;s Blog</title>
   
-  
+  <subtitle>Learn how to learn</subtitle>
   <link href="https://timchen0409.github.io/atom.xml" rel="self"/>
   
   <link href="https://timchen0409.github.io/"/>
