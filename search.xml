@@ -67,7 +67,7 @@
 <p>如果要運用在ASP.NET MVC 上可以參考網路較舊的教學文，但要注意新版的AutoMapper的設定與舊版有所差異，其他較進階的用法如多個物件對映至一個類別、複雜結構類別對映至扁平化類別，可以參考官方文件</p>
 ]]></content>
       <categories>
-        <category>.NetCore</category>
+        <category>.Net Core</category>
       </categories>
       <tags>
         <tag>.NET Core</tag>
@@ -77,7 +77,7 @@
       </tags>
   </entry>
   <entry>
-    <title>在.NET Core MVC使用 ClosedXML 匯出Excel</title>
+    <title>在.NET Core MVC 使用 ClosedXML 匯出Excel</title>
     <url>/2020/12/03/net-core-closedXML/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在後台常常需要有報表匯出Excel的功能，過往是使用<a href="https://github.com/nissl-lab/npoi">NPOI</a>去實作，近期專案決定使用另一套 Eecel 程式庫 ClosedXML，所以簡單練習紀錄一下</p>
 <a id="more"></a>
@@ -106,7 +106,7 @@
 <p>輕鬆地完成匯出報表的功能</p>
 ]]></content>
       <categories>
-        <category>.NetCore</category>
+        <category>.Net Core</category>
       </categories>
       <tags>
         <tag>.NET Core</tag>
