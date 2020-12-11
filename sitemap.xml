@@ -2,14 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://timchen0409.github.io/2020/12/03/net-core-closedXML/</loc>
+    <loc>https://timchen0409.github.io/2020/12/11/net-core-nlog/</loc>
     
     <lastmod>2020-12-11</lastmod>
     
   </url>
   
   <url>
-    <loc>https://timchen0409.github.io/2020/12/08/net-core-automapper/</loc>
+    <loc>https://timchen0409.github.io/2020/12/08/net-core-autoMapper/</loc>
     
     <lastmod>2020-12-11</lastmod>
     
@@ -18,7 +18,14 @@
   <url>
     <loc>https://timchen0409.github.io/about/index.html</loc>
     
-    <lastmod>2020-12-08</lastmod>
+    <lastmod>2020-12-11</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://timchen0409.github.io/2020/12/03/net-core-closedXML/</loc>
+    
+    <lastmod>2020-12-11</lastmod>
     
   </url>
   
@@ -74,7 +81,7 @@
   </url>
   
   <url>
-    <loc>https://timchen0409.github.io/tags/Automapper/</loc>
+    <loc>https://timchen0409.github.io/tags/AutoMapper/</loc>
     <lastmod>2020-12-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -82,6 +89,13 @@
   
   <url>
     <loc>https://timchen0409.github.io/tags/ClosedXML/</loc>
+    <lastmod>2020-12-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://timchen0409.github.io/tags/Nlog/</loc>
     <lastmod>2020-12-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
