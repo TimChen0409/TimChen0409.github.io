@@ -172,7 +172,7 @@
 <p>nlog-own-2020-12-10.log</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2020-12-10 14:35:02.7922||DEBUG|NlogExercise.Program|init main |url: |action: </span><br><span class="line">2020-12-10 14:35:05.7936||INFO|NlogExercise.Controllers.WeatherForecastController|--Information-- |url: https:&#x2F;&#x2F;localhost&#x2F;weatherforecast|action: Get</span><br><span class="line">2020-12-10 14:35:05.7936||WARN|NlogExercise.Controllers.WeatherForecastController|Warning |url: https:&#x2F;&#x2F;localhost&#x2F;weatherforecast|action: Get</span><br><span class="line">2020-12-10 14:35:05.7936||ERROR|NlogExercise.Controllers.WeatherForecastController|--Error-- |url: https:&#x2F;&#x2F;localhost&#x2F;weatherforecast|action: Get</span><br><span class="line">2020-12-10 14:35:05.7936||FATAL|NlogExercise.Controllers.WeatherForecastController|--Critical-- |url: https:&#x2F;&#x2F;localhost&#x2F;weatherforecast|action: Get</span><br></pre></td></tr></table></figure>
 
-<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>這篇簡單分享 NLog 在 .NET Core 的使用方式並運用在專案中，設定上十分友善，至於許多客製化的設定可以參考官方的文件，之後有時間再和大家分享儲存log至其他目標的用法</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>這篇簡單分享 NLog 在 .NET Core 的使用方式並運用在專案中，設定上十分友善，至於許多客製化的設定可以參考官方的文件，之後有時間再和大家分享儲存log至其他地方的用法</p>
 <h4 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h4><p><a href="https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-3">Getting-started-with-ASP.NET-Core-3</a></p>
 ]]></content>
       <categories>
