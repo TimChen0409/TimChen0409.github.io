@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"timchen0409.github.io","root":"/","scheme":"Pisces","version":"8.0.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+  </script>
+
+  <meta name="description" content="前言最近在讀一本電子書：LINQ Succinctly內容從LINQ觀念到實作都有介紹，以新手來說一百頁左右的內容算很好上手，其中內容有一段敘述引起我的好奇  Using Any() instead of Count() !&#x3D; 0 usually conveys the intent of the code better, and in some circumstances, can perfor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LINQ Any() 和 Count()效能差異比較">
+<meta property="og:url" content="https://timchen0409.github.io/2020/12/17/net-linq-any-count/index.html">
+<meta property="og:site_name" content="Tim Chen&#39;s Blog">
+<meta property="og:description" content="前言最近在讀一本電子書：LINQ Succinctly內容從LINQ觀念到實作都有介紹，以新手來說一百頁左右的內容算很好上手，其中內容有一段敘述引起我的好奇  Using Any() instead of Count() !&#x3D; 0 usually conveys the intent of the code better, and in some circumstances, can perfor">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://timchen0409.github.io/img/20201217/0.png">
+<meta property="og:image" content="https://timchen0409.github.io/img/20201217/1.png">
+<meta property="og:image" content="https://timchen0409.github.io/img/20201217/2.png">
+<meta property="article:published_time" content="2020-12-17T13:30:40.000Z">
+<meta property="article:modified_time" content="2020-12-17T12:43:05.177Z">
+<meta property="article:author" content="Tim Chen">
+<meta property="article:tag" content="Backend">
+<meta property="article:tag" content="C#">
+<meta property="article:tag" content=".NET">
+<meta property="article:tag" content="LINQ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://timchen0409.github.io/img/20201217/0.png">
+
+
+<link rel="canonical" href="https://timchen0409.github.io/2020/12/17/net-linq-any-count/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>LINQ Any() 和 Count()效能差異比較 | Tim Chen's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Tim Chen's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Tim Chen's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">我寫的不是Code，是一種感覺</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">8</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔<span class="badge">4</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <section class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List%E6%AF%94%E8%BC%83"><span class="nav-number">2.</span> <span class="nav-text">List比較</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linq-to-Entities%E6%AF%94%E8%BC%83"><span class="nav-number">3.</span> <span class="nav-text">Linq-to-Entities比較</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AA%9E"><span class="nav-number">4.</span> <span class="nav-text">結語</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="nav-number">4.0.1.</span> <span class="nav-text">參考資料</span></a></li></ol></li></ol></li></ol></div>
+        </section>
+        <!--/noindex-->
+
+        <section class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Tim Chen"
+      src="/img/avatar.png">
+  <p class="site-author-name" itemprop="name">Tim Chen</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/TimChen0409" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;TimChen0409" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+        </section>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://timchen0409.github.io/2020/12/17/net-linq-any-count/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/img/avatar.png">
+      <meta itemprop="name" content="Tim Chen">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Tim Chen's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LINQ Any() 和 Count()效能差異比較
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-12-17 21:30:40" itemprop="dateCreated datePublished" datetime="2020-12-17T21:30:40+08:00">2020-12-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/NET/" itemprop="url" rel="index"><span itemprop="name">.NET</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/12/17/net-linq-any-count/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/17/net-linq-any-count/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在讀一本電子書：<em>LINQ Succinctly</em><br>內容從LINQ觀念到實作都有介紹，以新手來說一百頁左右的內容算很好上手，其中內容有一段敘述引起我的好奇</p>
+<blockquote>
+<p>Using Any() instead of Count() != 0 usually conveys the intent of the code better, and in some circumstances, can perform better.</p>
+</blockquote>
+<p>因為本人過往在撰寫程式時，總是習慣使用Count()來判斷集合中是否有物件，所以就來測試看看</p>
+<a id="more"></a>
+
+<h2 id="List比較"><a href="#List比較" class="headerlink" title="List比較"></a>List比較</h2><p>我們先建立一個Product類別，然後使用For迴圈建立一個Product的List集合，之後使用StopWatch去測量已耗用時間<br>除了上述兩種情況，這邊額外新增測試 List 的 Count屬性<br>我們新增一個主控台應用程式，範例程式碼如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> System.Linq;</span><br><span class="line"><span class="keyword">using</span> System.Diagnostics;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">AnyCountTest</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="comment">//建立資料</span></span><br><span class="line">            List&lt;Product&gt; products = <span class="keyword">new</span> List&lt;Product&gt;();</span><br><span class="line">            <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000000</span>; i++)</span><br><span class="line">            &#123;</span><br><span class="line">                products.Add(<span class="keyword">new</span> Product &#123; Id = Guid.NewGuid(), Name = <span class="string">$&quot;Product<span class="subst">&#123;i&#125;</span>&quot;</span> &#125;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Stopwatch sw = <span class="keyword">new</span> Stopwatch();</span><br><span class="line">            <span class="built_in">int</span> num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">            Console.WriteLine(<span class="string">$&quot;------------------------------List集合開始測試&quot;</span>);</span><br><span class="line">           </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            sw.Start();</span><br><span class="line">            <span class="keyword">foreach</span> (<span class="keyword">var</span> item <span class="keyword">in</span> products)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (products.Count != <span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    num++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            sw.Stop();</span><br><span class="line">            num = <span class="number">0</span>;</span><br><span class="line">            Console.WriteLine(<span class="string">$&quot;Count屬性：<span class="subst">&#123;sw.Elapsed&#125;</span>&quot;</span>);</span><br><span class="line"></span><br><span class="line">            sw.Restart();</span><br><span class="line">            <span class="keyword">foreach</span> (<span class="keyword">var</span> item <span class="keyword">in</span> products)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (products.Count() != <span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    num++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            sw.Stop();</span><br><span class="line">            num = <span class="number">0</span>;</span><br><span class="line">            Console.WriteLine(<span class="string">$&quot;Count()  ：<span class="subst">&#123;sw.Elapsed&#125;</span>&quot;</span>);</span><br><span class="line"></span><br><span class="line">            sw.Restart();</span><br><span class="line">            <span class="keyword">foreach</span> (<span class="keyword">var</span> item <span class="keyword">in</span> products)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (products.Any())</span><br><span class="line">                &#123;</span><br><span class="line">                    num++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            sw.Stop();</span><br><span class="line">            num = <span class="number">0</span>;</span><br><span class="line">            Console.WriteLine(<span class="string">$&quot;Any      ：<span class="subst">&#123;sw.Elapsed&#125;</span>&quot;</span>);</span><br><span class="line"></span><br><span class="line">            Console.ReadLine();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">class</span> <span class="title">Product</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> Guid Id &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">        <span class="keyword">public</span> <span class="built_in">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>讓我們來看看輸出結果：<br><img src="/img/20201217/0.png"></p>
+<blockquote>
+<p>Count&gt;Count()&gt;Any()</p>
+</blockquote>
+<p>從上述的結果可以看到如果有 <code>Count</code> 屬性時，效率最佳所以一定優先使用，<code>Count()</code>也比<code>Any()</code>好，但這邊100萬筆資料來看，三者效能差異不會差得太過誇張，再來我們看一下Linq-to-Entities</p>
+<h2 id="Linq-to-Entities比較"><a href="#Linq-to-Entities比較" class="headerlink" title="Linq-to-Entities比較"></a>Linq-to-Entities比較</h2><p>首先在專案的 NuGet 安裝 EntityFramework 套件，之後我們先在DB準備好5000筆的商品資料<br><img src="/img/20201217/1.png"><br>過程不是這篇重點所以略過，這邊自己可以選擇哪種做法比較方便，我是採用DB First方式，再寫迴圈把資料灌入資料表<br>準備好資料後開始測試，程式碼範例如下：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> System.Linq;</span><br><span class="line"><span class="keyword">using</span> System.Diagnostics;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">AnyCountTest</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">using</span> (LinqTestEntities db = <span class="keyword">new</span> LinqTestEntities())</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//取得資料</span></span><br><span class="line">                <span class="keyword">var</span> products = <span class="keyword">from</span> p <span class="keyword">in</span> db.Product</span><br><span class="line">                               <span class="keyword">select</span> p;</span><br><span class="line"></span><br><span class="line">                Stopwatch sw = <span class="keyword">new</span> Stopwatch();</span><br><span class="line">                <span class="built_in">int</span> num = <span class="number">0</span>;</span><br><span class="line">                Console.WriteLine(<span class="string">$&quot;------------------------------Entity集合開始測試&quot;</span>);</span><br><span class="line">                <span class="keyword">var</span> pList = products.ToList();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</span><br><span class="line">                &#123;</span><br><span class="line">                    sw.Restart();</span><br><span class="line">                    <span class="keyword">foreach</span> (<span class="keyword">var</span> item <span class="keyword">in</span> products)</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">if</span> (products.Count() != <span class="number">0</span>)</span><br><span class="line">                        &#123;</span><br><span class="line">                            num++;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    sw.Stop();</span><br><span class="line">                    num = <span class="number">0</span>;</span><br><span class="line">                    Console.WriteLine(<span class="string">$&quot;Count()  ：<span class="subst">&#123;sw.Elapsed&#125;</span>&quot;</span>);</span><br><span class="line"></span><br><span class="line">                    sw.Restart();</span><br><span class="line">                    <span class="keyword">foreach</span> (<span class="keyword">var</span> item <span class="keyword">in</span> products)</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">if</span> (products.Any())</span><br><span class="line">                        &#123;</span><br><span class="line">                            num++;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    sw.Stop();</span><br><span class="line">                    num = <span class="number">0</span>;</span><br><span class="line">                    Console.WriteLine(<span class="string">$&quot;Any      ：<span class="subst">&#123;sw.Elapsed&#125;</span>&quot;</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                Console.ReadLine();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>結果：<br><img src="/img/20201217/2.png"></p>
+<blockquote>
+<p>Any()&gt;Count()</p>
+</blockquote>
+<p>這邊可以看到，資料僅5000筆，效率上<code>Count()</code>就比<code>Any()</code>慢上許多，如果資料一變多那差異就更大了…，所以這邊就務必去使用Any()去作判斷</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>這邊提醒一下條件使用 Count() != 0 或 Count() &gt; 0皆不影響上述的測試結果，至於該兩者效能差異的詳細原因可以拜讀下面幾篇討論與文章，尤其小朱大的文章說明得很仔細。</p>
+<h4 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h4><p><a target="_blank" rel="noopener" href="https://dotblogs.com.tw/regionbbs/2013/04/10/when_to_use_any_or_count_in_linq">小朱® 的技術隨手寫 - Any() vs. Count() 何時可用? 何時不可用?</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/305092/which-method-performs-better-any-vs-count-0">Which method performs better: .Any() vs .Count() &gt; 0?</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/2856965/query-result-what-should-i-use-count-or-any">query result what should i use Count() or Any()</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/7969354/count-property-vs-count-method">Count property vs Count() method?</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Backend/" rel="tag"># Backend</a>
+              <a href="/tags/C/" rel="tag"># C#</a>
+              <a href="/tags/NET/" rel="tag"># .NET</a>
+              <a href="/tags/LINQ/" rel="tag"># LINQ</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/12/11/net-core-nlog/" rel="prev" title=".NET Core - 使用 NLog 紀錄日誌資訊">
+                  <i class="fa fa-chevron-left"></i> .NET Core - 使用 NLog 紀錄日誌資訊
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+      
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-bell"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">若要轉載文章，麻煩請保留原作者名稱與原始連結。</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://timchen-blog.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://timchen0409.github.io/2020/12/17/net-linq-any-count/";
+    this.page.identifier = "2020/12/17/net-linq-any-count/";
+    this.page.title = "LINQ Any() 和 Count()效能差異比較";
+    };
+  NexT.utils.loadComments('#disqus_thread', () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://timchen-blog.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
