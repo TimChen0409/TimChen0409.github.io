@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://timchen0409.github.io/2020/12/08/net-core-automapper/</loc>
+    
+    <lastmod>2020-12-23</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://timchen0409.github.io/2020/12/03/net-core-closedXML/</loc>
+    
+    <lastmod>2020-12-23</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://timchen0409.github.io/2020/12/11/net-core-nlog/</loc>
+    
+    <lastmod>2020-12-23</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://timchen0409.github.io/2020/12/17/net-linq-any-count/</loc>
     
     <lastmod>2020-12-23</lastmod>
@@ -16,28 +37,7 @@
   </url>
   
   <url>
-    <loc>https://timchen0409.github.io/2020/12/08/net-core-automapper/</loc>
-    
-    <lastmod>2020-12-11</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://timchen0409.github.io/2020/12/11/net-core-nlog/</loc>
-    
-    <lastmod>2020-12-11</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://timchen0409.github.io/about/index.html</loc>
-    
-    <lastmod>2020-12-11</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://timchen0409.github.io/2020/12/03/net-core-closedXML/</loc>
     
     <lastmod>2020-12-11</lastmod>
     
@@ -132,7 +132,7 @@
 
   
   <url>
-    <loc>https://timchen0409.github.io/categories/Net-Core/</loc>
+    <loc>https://timchen0409.github.io/categories/NET-Core/</loc>
     <lastmod>2020-12-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

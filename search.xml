@@ -67,7 +67,7 @@
 <p>如果要運用在ASP.NET MVC 上可以參考網路較舊的教學文，但要注意新版的AutoMapper的設定與舊版有所差異，其他較進階的用法如多個物件對映至一個類別、複雜結構類別對映至扁平化類別，可以參考官方文件</p>
 ]]></content>
       <categories>
-        <category>.Net Core</category>
+        <category>.NET Core</category>
       </categories>
       <tags>
         <tag>.NET Core</tag>
@@ -106,7 +106,7 @@
 <p>輕鬆地完成匯出報表的功能</p>
 ]]></content>
       <categories>
-        <category>.Net Core</category>
+        <category>.NET Core</category>
       </categories>
       <tags>
         <tag>.NET Core</tag>
@@ -176,7 +176,7 @@
 <h4 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h4><p><a href="https://github.com/NLog/NLog/wiki/Getting-started-with-ASP.NET-Core-3">Getting-started-with-ASP.NET-Core-3</a></p>
 ]]></content>
       <categories>
-        <category>.Net Core</category>
+        <category>.NET Core</category>
       </categories>
       <tags>
         <tag>.NET Core</tag>
