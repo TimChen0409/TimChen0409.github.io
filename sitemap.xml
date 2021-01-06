@@ -95,13 +95,6 @@
   </url>
   
   <url>
-    <loc>https://timchen0409.github.io/tags/Automapper/</loc>
-    <lastmod>2021-01-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://timchen0409.github.io/tags/ClosedXML/</loc>
     <lastmod>2021-01-06</lastmod>
     <changefreq>daily</changefreq>
@@ -124,6 +117,13 @@
   
   <url>
     <loc>https://timchen0409.github.io/tags/LINQ/</loc>
+    <lastmod>2021-01-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://timchen0409.github.io/tags/AutoMapper/</loc>
     <lastmod>2021-01-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
