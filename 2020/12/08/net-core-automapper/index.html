@@ -24,12 +24,12 @@
     var CONFIG = {"hostname":"timchen0409.github.io","root":"/","scheme":"Pisces","version":"8.0.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1}},"activeClass":"disqus"},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜尋...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
-  <meta name="description" content="前言在撰寫專案時，常常會碰到資料類別對映的處理，例如ViewModel和實際Entity之間的對應，或是層與層之間的轉換。常見的處理方式如下：">
+  <meta name="description" content="前言在撰寫專案時，經常會碰到資料類別對映的處理，例如ViewModel和實際Entity之間的對應，或是層與層之間的轉換。常見的處理方式如下：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在.NET Core 使用 AutoMapper 輕鬆轉換類別">
 <meta property="og:url" content="https://timchen0409.github.io/2020/12/08/net-core-automapper/index.html">
 <meta property="og:site_name" content="Tim Chen&#39;s Blog">
-<meta property="og:description" content="前言在撰寫專案時，常常會碰到資料類別對映的處理，例如ViewModel和實際Entity之間的對應，或是層與層之間的轉換。常見的處理方式如下：">
+<meta property="og:description" content="前言在撰寫專案時，經常會碰到資料類別對映的處理，例如ViewModel和實際Entity之間的對應，或是層與層之間的轉換。常見的處理方式如下：">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://timchen0409.github.io/img/20201208/0.png">
 <meta property="og:image" content="https://timchen0409.github.io/img/20201208/1.png">
@@ -39,7 +39,7 @@
 <meta property="og:image" content="https://timchen0409.github.io/img/20201208/5.png">
 <meta property="og:image" content="https://timchen0409.github.io/img/20201208/6.png">
 <meta property="article:published_time" content="2020-12-08T07:58:50.000Z">
-<meta property="article:modified_time" content="2020-12-23T14:15:47.405Z">
+<meta property="article:modified_time" content="2021-01-06T12:47:27.442Z">
 <meta property="article:author" content="Tim Chen">
 <meta property="article:tag" content=".NET Core">
 <meta property="article:tag" content="Backend">
@@ -360,7 +360,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在撰寫專案時，常常會碰到資料類別對映的處理，例如ViewModel和實際Entity之間的對應，或是層與層之間的轉換。常見的處理方式如下：</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在撰寫專案時，經常會碰到資料類別對映的處理，例如ViewModel和實際Entity之間的對應，或是層與層之間的轉換。常見的處理方式如下：</p>
 <a id="more"></a>
 
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> IActionResult <span class="title">Index</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> result = employeeList.Select(x =&gt; <span class="keyword">new</span> EmployeeViewModel</span><br><span class="line">    &#123;</span><br><span class="line">        Id = x.Id,</span><br><span class="line">        Name = x.Name,</span><br><span class="line">        Phone = x.Phone</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> View(result);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//或是</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> IActionResult <span class="title">Index</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    List&lt;EmployeeViewModel&gt; result = <span class="keyword">new</span> List&lt;EmployeeViewModel&gt;();</span><br><span class="line">    <span class="keyword">foreach</span> (<span class="keyword">var</span> employee <span class="keyword">in</span> employeeList)</span><br><span class="line">    &#123;</span><br><span class="line">        result.Add(<span class="keyword">new</span> EmployeeViewModel()</span><br><span class="line">        &#123;</span><br><span class="line">            Id = employee.Id,</span><br><span class="line">            Name=employee.Name,</span><br><span class="line">            Phone=employee.Phone</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> View(result);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
