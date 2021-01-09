@@ -102,7 +102,7 @@
 <h4 id="忽略對映"><a href="#忽略對映" class="headerlink" title="忽略對映"></a>忽略對映</h4><p>如果兩個類別之間大多數欄位雖然對映，但某幾個欄位是沒有對映的，來源資料並沒有某個目標資料需要的欄位，如果直接Map()對映，就會發生找不到對映欄位的錯誤。這時候就可以使用 Ignore 來忽略掉指定的欄位。</p>
 <figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">CreateMap&lt;Employee, EmployeeViewModel&gt;().ForMember(des =&gt; des.FullName, src =&gt; src.Ignore());</span><br></pre></td></tr></table></figure>
 
-<p>##結語<br>這篇把 AutoMapper 運用在 .Net Core的基本用法和設定介紹完了，並利用.Net Core DI的特性集中管理，將這些類別轉換對映的設定都集中在一個地方</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>這篇把 AutoMapper 運用在 .Net Core的基本用法和設定介紹完了，並利用.Net Core DI的特性集中管理，將這些類別轉換對映的設定都集中在一個地方</p>
 <p>如果要運用在ASP.NET MVC 上可以參考網路較舊的教學文，但要注意新版的AutoMapper的設定與舊版有所差異，其他較進階的用法如多個物件對映至一個類別、複雜結構類別對映至扁平化類別，可以參考官方文件</p>
 ]]></content>
       <categories>
