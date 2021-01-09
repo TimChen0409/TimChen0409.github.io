@@ -90,18 +90,19 @@
 
 <p>透過建構式注入 IMapper 即可自動取得所有Profile，並直接呼叫Map()方法對映，達成程式碼簡潔、低耦合的好處</p>
 <h2 id="延伸使用"><a href="#延伸使用" class="headerlink" title="延伸使用"></a>延伸使用</h2><p>(<strong>下列範例已將 EmployeeViewModel 的 Name 欄位改成 FullName</strong>)</p>
-<h4 id="反轉對映"><a href="#反轉對映" class="headerlink" title="反轉對映"></a>反轉對映</h4><p>當你的類別之間可能需要往回轉型，或是一時分不清是哪個Model要對應到哪個Model，那可以加上ReverseMap()實現雙向映射，以免轉來轉去出錯。</p>
+<h3 id="反轉對映"><a href="#反轉對映" class="headerlink" title="反轉對映"></a>反轉對映</h3><p>當你的類別之間可能需要往回轉型，或是一時分不清是哪個Model要對應到哪個Model，那可以加上ReverseMap()實現雙向映射，以免轉來轉去出錯。</p>
 <figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">CreateMap&lt;Employee, EmployeeViewModel&gt;().ReverseMap();</span><br></pre></td></tr></table></figure>
 
-<h4 id="客製化對映"><a href="#客製化對映" class="headerlink" title="客製化對映"></a>客製化對映</h4><p>在分層架構時會建立自己的Model，有時候可能實際上我們並不一定每個欄位的名稱都是一樣的、或者需要對Model進行特殊處理，那就可以用以下方法來處理：</p>
+<h3 id="客製化對映"><a href="#客製化對映" class="headerlink" title="客製化對映"></a>客製化對映</h3><p>在分層架構時會建立自己的Model，有時候可能實際上我們並不一定每個欄位的名稱都是一樣的、或者需要對Model進行特殊處理，那就可以用以下方法來處理：</p>
 <figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">CreateMap&lt;Employee, EmployeeViewModel&gt;().ForMember(des =&gt; des.FullName, opt =&gt; opt.MapFrom(src =&gt; src.Name));</span><br></pre></td></tr></table></figure>
 
 <p>如果是改變欄位資料或合併，那就可以用以下方法來處理：</p>
 <figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">CreateMap&lt;Employee, EmployeeViewModel&gt;().ForMember(des =&gt; des.FullName, opt =&gt; opt.MapFrom(src =&gt; <span class="string">$&quot;<span class="subst">&#123;src.Id&#125;</span>：<span class="subst">&#123;src.Name&#125;</span>&quot;</span>));</span><br></pre></td></tr></table></figure>
 <p><img src="/img/20201208/6.png"></p>
-<h4 id="忽略對映"><a href="#忽略對映" class="headerlink" title="忽略對映"></a>忽略對映</h4><p>如果兩個類別之間大多數欄位雖然對映，但某幾個欄位是沒有對映的，來源資料並沒有某個目標資料需要的欄位，如果直接Map()對映，就會發生找不到對映欄位的錯誤。這時候就可以使用 Ignore 來忽略掉指定的欄位。</p>
+<h3 id="忽略對映"><a href="#忽略對映" class="headerlink" title="忽略對映"></a>忽略對映</h3><p>如果兩個類別之間大多數欄位雖然對映，但某幾個欄位是沒有對映的，來源資料並沒有某個目標資料需要的欄位，如果直接Map()對映，就會發生找不到對映欄位的錯誤。這時候就可以使用 Ignore 來忽略掉指定的欄位。</p>
 <figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">CreateMap&lt;Employee, EmployeeViewModel&gt;().ForMember(des =&gt; des.FullName, src =&gt; src.Ignore());</span><br></pre></td></tr></table></figure>
 
+<hr>
 <h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>這篇把 AutoMapper 運用在 .Net Core的基本用法和設定介紹完了，並利用.Net Core DI的特性集中管理，將這些類別轉換對映的設定都集中在一個地方</p>
 <p>如果要運用在ASP.NET MVC 上可以參考網路較舊的教學文，但要注意新版的AutoMapper的設定與舊版有所差異，其他較進階的用法如多個物件對映至一個類別、複雜結構類別對映至扁平化類別，可以參考官方文件</p>
 ]]></content>
