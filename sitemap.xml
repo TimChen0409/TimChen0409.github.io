@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://timchen0409.github.io/2021/02/06/vue-basic-tips/</loc>
+    
+    <lastmod>2021-03-09</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://timchen0409.github.io/2020/12/08/net-core-automapper/</loc>
     
     <lastmod>2021-01-09</lastmod>
@@ -67,7 +74,7 @@
 
   <url>
     <loc>https://timchen0409.github.io/</loc>
-    <lastmod>2021-01-09</lastmod>
+    <lastmod>2021-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -75,56 +82,77 @@
   
   <url>
     <loc>https://timchen0409.github.io/tags/NET-Core/</loc>
-    <lastmod>2021-01-09</lastmod>
+    <lastmod>2021-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://timchen0409.github.io/tags/Backend/</loc>
-    <lastmod>2021-01-09</lastmod>
+    <lastmod>2021-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://timchen0409.github.io/tags/C/</loc>
-    <lastmod>2021-01-09</lastmod>
+    <lastmod>2021-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://timchen0409.github.io/tags/ClosedXML/</loc>
-    <lastmod>2021-01-09</lastmod>
+    <lastmod>2021-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://timchen0409.github.io/tags/Nlog/</loc>
-    <lastmod>2021-01-09</lastmod>
+    <lastmod>2021-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://timchen0409.github.io/tags/NET/</loc>
-    <lastmod>2021-01-09</lastmod>
+    <lastmod>2021-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://timchen0409.github.io/tags/LINQ/</loc>
-    <lastmod>2021-01-09</lastmod>
+    <lastmod>2021-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://timchen0409.github.io/tags/Automapper/</loc>
-    <lastmod>2021-01-09</lastmod>
+    <lastmod>2021-03-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://timchen0409.github.io/tags/Vue/</loc>
+    <lastmod>2021-03-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://timchen0409.github.io/tags/FrontEnd/</loc>
+    <lastmod>2021-03-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://timchen0409.github.io/tags/JavaScript/</loc>
+    <lastmod>2021-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
@@ -133,14 +161,21 @@
   
   <url>
     <loc>https://timchen0409.github.io/categories/NETCore/</loc>
-    <lastmod>2021-01-09</lastmod>
+    <lastmod>2021-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://timchen0409.github.io/categories/NET/</loc>
-    <lastmod>2021-01-09</lastmod>
+    <lastmod>2021-03-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://timchen0409.github.io/categories/Vue/</loc>
+    <lastmod>2021-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
